@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="FinancialTracker.UI.View.RecipientDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FinancialTracker.UI.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Content="Name" Margin="10 10 10 0"/>
+        <TextBox Grid.Row="1" Margin="10" Text="{Binding Recipient.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <Label Grid.Row="2" Content="Address" Margin="10 0"/>
+        <TextBox Grid.Row="3" Margin="10" Text="{Binding Recipient.Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <!--TODO: Make a static resource for displaying readonly dates-->
+        <Label Grid.Row="4" Content="First Payment Date" Margin="10 0"/>
+        <TextBox Grid.Row="5" Margin="10" IsReadOnly="True" Text="{Binding Recipient.FirstPaymentDate, StringFormat = MM/dd/yyyy,
+                                                        Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <Label Grid.Row="6" Content="Last Payment Date" Margin="10 0"/>
+        <TextBox Grid.Row="7" Margin="10" IsReadOnly="True" Text="{Binding Recipient.LastPaymentDate, StringFormat = MM/dd/yyyy,
+                                                        Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <DockPanel Grid.Row="8" Margin="10">
+            <StackPanel DockPanel.Dock="Right">
+                <Button Content="Add" Width="125" Margin="10"
+                        Command="{Binding AddPaymentCommand}"/>
+                <Button Content="View" Width="125" Margin="10"
+                        Command="{Binding ViewPaymentCommand}"/>
+            </StackPanel>
+            <DataGrid ItemsSource="{Binding PaymentLookup}"
+                      SelectedItem="{Binding SelectedPayment, Mode=TwoWay}"
+                      AutoGenerateColumns="False" RowHeaderWidth="0"
+                      CanUserAddRows="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Payments" Width="*"
+                                        Binding="{Binding DisplayMember, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+
+        <StackPanel Grid.Row="9" Orientation="Horizontal">
+            <Button Content="Save" Width="75" Margin="10" Command="{Binding SaveCommand}"/>
+            <Button Content="Delete" Width="75" Margin="10" Command="{Binding DeleteCommand}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

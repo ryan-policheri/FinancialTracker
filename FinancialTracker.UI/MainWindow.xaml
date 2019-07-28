@@ -1,0 +1,67 @@
+﻿<Controls:MetroWindow x:Class="FinancialTracker.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:local="clr-namespace:FinancialTracker.UI"
+        xmlns:view="clr-namespace:FinancialTracker.UI.View"
+        xmlns:viewModel="clr-namespace:FinancialTracker.UI.ViewModel"
+        mc:Ignorable="d"
+        Title="FinancialTracker" Height="700" Width="1000" FontSize="20"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModel:RecipientDetailViewModel}">
+            <view:RecipientDetailView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:PaymentDetailViewModel}">
+            <view:PaymentDetailView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:PaymentPurposeDetailViewModel}">
+            <view:PaymentPurposeDetailView/>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Menu Grid.ColumnSpan="2" FontSize="20">
+            <MenuItem Header="Create">
+                <MenuItem Header="New Payment" Command="{Binding CreateNewDetailCommand}" 
+                          CommandParameter="{x:Type viewModel:PaymentDetailViewModel}"/>
+                <MenuItem Header="New Recipient" Command="{Binding CreateNewDetailCommand}" 
+                          CommandParameter="{x:Type viewModel:RecipientDetailViewModel}"/>
+                <MenuItem Header="New Payment Purpose" Command="{Binding CreateNewDetailCommand}" 
+                          CommandParameter="{x:Type viewModel:PaymentPurposeDetailViewModel}"/>
+            </MenuItem>
+        </Menu>
+
+        <view:NavigationView Grid.Column="0" Grid.Row="1" DataContext="{Binding NavigationViewModel}"/>
+        <TabControl Grid.Column="1" Grid.Row="1" ItemsSource="{Binding DetailViewModels}"
+                    SelectedItem="{Binding SelectedDetailViewModel, Mode=TwoWay}">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="TabItem" BasedOn="{StaticResource {x:Type TabItem}}">
+                    <Setter Property="Background" Value="#333333"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Title}"></TextBlock>
+                        <TextBlock Text="*" Visibility="{Binding HasChanges, Converter={StaticResource booleanToVisibilityConverter}}"/>
+                        <Button Command="{Binding CloseDetailViewCommand}" VerticalContentAlignment="Top"
+                                Content="X" Margin="2 0 2 2" FontSize="20" Style="{StaticResource ChromelessButtonStyle}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+        </TabControl>
+    </Grid>
+</Controls:MetroWindow>
